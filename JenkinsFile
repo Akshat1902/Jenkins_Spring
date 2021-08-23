@@ -6,10 +6,9 @@ pipeline{
     stages{
         stage('Checkout SCM'){
             steps{
-                git url: 'https://gitlab.com/123Balu42/Jenkins_Spring.git'
+                git url: 'https://github.com/Akshat1902/Jenkins_Spring.git'
             }
         }
-        
         stage('Build'){
             steps{
                 echo "Running Job: ${env.JOB_NAME}\n build: ${env.BUILD_ID}"
@@ -21,20 +20,20 @@ pipeline{
                 }
             }
 		}
+		post{
+             success{
+                    emailext attachPattern: "*target/*.war",
+                    body: '''${SCRIPT, template="groovy-template"}''',
+                    subject: "Project Build: ${env.JOB_NAME} - SUCCESS"
+                    mimeType: 'text/html'
+                    to: 'chopraakshat2017@gmail.com'
+            }
+            failure{
+                    mail to: 'chopraakshat2017@gmail.com' 
+                    from: 'chopraakshat2017@gmail.com'
+                    Subject: "Project Build: ${env.JOB_NAME} - Failed"
+                    body: "Job Failed -  ${env.JOB_NAME}" build: ${env.BUILD_NUMBER}
+            }       
+        }
     }
-	post{
-		failure{
-			mail to: 'chopraakshat2017@gmail.com'
-			from: 'chopraakshat2017@gmail.com'
-			Subject: "Project Build: ${env.JOB_NAME} - Failed"
-			body: "Job Failed - ${env.JOB_NAME}" build: ${env.BUILD_NUMBER}
-		}
-		success{
-			emailext attachPattern: "*target/*.war",
-			body: '''${SCRIPT, template="groovy-template"}''',
-			subject: "Project Build: ${env.JOB_NAME} - SUCCESS"
-			mimeType: 'text/html'
-			to: 'chopraakshat2017@gmail.com'
-		}
-	}
 }
