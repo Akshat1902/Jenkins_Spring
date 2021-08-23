@@ -20,7 +20,8 @@ pipeline{
                 }
             }
 		}
-		post{
+    }
+	post{
              success{
                     emailext attachPattern: "*target/*.war",
                     body: '''${SCRIPT, template="groovy-template"}''',
@@ -35,5 +36,4 @@ pipeline{
                     body: "Job Failed -  ${env.JOB_NAME}" build: ${env.BUILD_NUMBER}
             }       
         }
-    }
 }
