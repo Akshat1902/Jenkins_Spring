@@ -23,7 +23,7 @@ pipeline{
     	}
 	post{
 		success{
-			emailext attachPattern: "*target/*.war",
+			emailext attachmentsPattern: "*target/*.war",
 			body: '''${SCRIPT, template="groovy-template"}''',
 			subject: "Project Build: ${env.JOB_NAME} - SUCCESS",
 			mimeType: 'text/html',
